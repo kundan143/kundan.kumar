@@ -29,7 +29,7 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--sky);border-radius:10px;}
 
-/* cursor-glow replaced by Three.js canvas */
+/* custom cursor */ * { cursor: none !important; }
 canvas#particles{position:fixed;top:0;left:0;z-index:0;opacity:0.4;}
 
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:16px 8%;background:rgba(2,6,23,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
@@ -346,6 +346,182 @@ footer{text-align:center;padding:40px;border-top:1px solid var(--border);color:v
   .cards-grid{grid-template-columns:repeat(2,1fr);}
   .script-grid{grid-template-columns:repeat(2,1fr);}
 }
+
+/* ===== OPEN TO WORK ===== */
+.otw-badge {
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(52,211,153,0.1));
+  border:1.5px solid rgba(52,211,153,0.5);
+  border-radius:50px;padding:10px 20px;
+  font-size:13px;font-weight:600;color:#34d399;
+  margin-bottom:28px;cursor:pointer;
+  animation:fadeUp 0.6s ease forwards, otwPulse 3s ease-in-out infinite;
+  position:relative;overflow:hidden;transition:.3s;
+  width:fit-content;
+}
+.otw-badge::before {
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(52,211,153,0.08),transparent);
+  transform:translateX(-100%);animation:otwShimmer 2.5s ease-in-out infinite;
+}
+@keyframes otwShimmer{to{transform:translateX(100%);}}
+@keyframes otwPulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,0.4);}50%{box-shadow:0 0 0 10px rgba(52,211,153,0);}}
+.otw-badge:hover{transform:translateY(-2px) scale(1.03);border-color:rgba(52,211,153,0.9);box-shadow:0 8px 30px rgba(52,211,153,0.25);}
+.otw-dot {
+  width:10px;height:10px;background:#34d399;border-radius:50%;
+  box-shadow:0 0 8px #34d399;
+  animation:pulse 1.5s infinite;flex-shrink:0;
+}
+.otw-badge-text { line-height:1; }
+.otw-badge-sub { font-size:10px;color:rgba(52,211,153,0.7);font-family:'JetBrains Mono',monospace;letter-spacing:1px;display:block;margin-top:2px; }
+.otw-arrow { font-size:14px;opacity:0.7;transition:.3s; }
+.otw-badge:hover .otw-arrow { transform:translateX(3px);opacity:1; }
+
+/* OTW Overlay */
+.otw-overlay {
+  position:fixed;inset:0;background:rgba(2,6,23,0.85);backdrop-filter:blur(12px);
+  z-index:10000;display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:.4s ease;
+}
+.otw-overlay.open{opacity:1;pointer-events:all;}
+
+/* OTW Panel */
+.otw-panel {
+  background:linear-gradient(145deg,#0f172a,#1e293b);
+  border:1px solid rgba(52,211,153,0.3);
+  border-radius:24px;padding:0;
+  width:min(600px,94vw);max-height:90vh;
+  overflow:hidden;
+  transform:translateY(40px) scale(0.95);
+  transition:.4s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+}
+.otw-overlay.open .otw-panel{transform:translateY(0) scale(1);}
+.otw-panel-header {
+  padding:28px 32px 24px;
+  background:linear-gradient(135deg,rgba(52,211,153,0.12),rgba(56,189,248,0.06));
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  position:relative;
+}
+.otw-panel-header-top { display:flex;align-items:center;justify-content:space-between;margin-bottom:12px; }
+.otw-panel-title { font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#e2e8f0;display:flex;align-items:center;gap:10px; }
+.otw-panel-title .otw-dot { width:12px;height:12px; }
+.otw-close {
+  width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);color:#64748b;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:.2s;
+}
+.otw-close:hover{background:rgba(255,255,255,0.12);color:#e2e8f0;}
+.otw-panel-sub { font-size:13px;color:#64748b;font-family:'JetBrains Mono',monospace;letter-spacing:1px; }
+
+/* OTW Toggle switch */
+.otw-toggle-row {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 32px;border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.otw-toggle-label { font-size:14px;font-weight:600;color:#e2e8f0; }
+.otw-toggle-sub { font-size:12px;color:#64748b;margin-top:3px; }
+.otw-switch { position:relative;width:52px;height:28px;flex-shrink:0; }
+.otw-switch input { opacity:0;width:0;height:0; }
+.otw-slider {
+  position:absolute;inset:0;background:#1e293b;border:1.5px solid rgba(255,255,255,0.1);
+  border-radius:50px;cursor:pointer;transition:.3s;
+}
+.otw-slider::before {
+  content:'';position:absolute;width:20px;height:20px;
+  background:#64748b;border-radius:50%;left:3px;top:2px;transition:.3s;
+}
+.otw-switch input:checked ~ .otw-slider { background:rgba(52,211,153,0.2);border-color:rgba(52,211,153,0.6); }
+.otw-switch input:checked ~ .otw-slider::before { background:#34d399;transform:translateX(24px);box-shadow:0 0 10px rgba(52,211,153,0.6); }
+
+/* OTW Body */
+.otw-panel-body { padding:24px 32px;overflow-y:auto;max-height:calc(90vh - 220px); }
+.otw-panel-body::-webkit-scrollbar{width:4px;}
+.otw-panel-body::-webkit-scrollbar-thumb{background:rgba(52,211,153,0.3);border-radius:4px;}
+
+.otw-field { margin-bottom:22px; }
+.otw-field-label { font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:#38bdf8;text-transform:uppercase;margin-bottom:10px;display:block; }
+
+/* Role chips */
+.otw-chips { display:flex;flex-wrap:wrap;gap:8px; }
+.otw-chip {
+  padding:7px 16px;border-radius:20px;font-size:12px;font-weight:500;
+  border:1.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);
+  color:#94a3b8;cursor:pointer;transition:.25s;font-family:'JetBrains Mono',monospace;
+}
+.otw-chip.selected { background:rgba(52,211,153,0.12);border-color:rgba(52,211,153,0.5);color:#34d399; }
+.otw-chip:hover:not(.selected){border-color:rgba(255,255,255,0.18);color:#e2e8f0;}
+
+/* Work type pills */
+.otw-types { display:flex;flex-wrap:wrap;gap:8px; }
+.otw-type {
+  padding:8px 18px;border-radius:10px;font-size:12px;font-weight:600;
+  border:1.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);
+  color:#94a3b8;cursor:pointer;transition:.25s;
+}
+.otw-type.selected { background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.5);color:#38bdf8; }
+.otw-type:hover:not(.selected){border-color:rgba(255,255,255,0.18);color:#e2e8f0;}
+
+/* Location input */
+.otw-locations { display:flex;flex-wrap:wrap;gap:8px;margin-top:6px; }
+.otw-loc-tag {
+  display:inline-flex;align-items:center;gap:6px;padding:6px 14px;
+  border-radius:20px;background:rgba(129,140,248,0.1);
+  border:1px solid rgba(129,140,248,0.3);color:#818cf8;font-size:12px;
+}
+.otw-loc-tag .remove { cursor:pointer;opacity:0.6;transition:.2s;font-size:14px;line-height:1; }
+.otw-loc-tag .remove:hover{opacity:1;}
+
+/* Notice period */
+.otw-notice { display:flex;gap:8px;flex-wrap:wrap; }
+.otw-notice-opt {
+  padding:7px 16px;border-radius:10px;font-size:12px;font-weight:500;
+  border:1.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);
+  color:#94a3b8;cursor:pointer;transition:.25s;
+}
+.otw-notice-opt.selected{background:rgba(251,146,60,0.12);border-color:rgba(251,146,60,0.5);color:#fb923c;}
+
+/* Save button */
+.otw-save {
+  width:100%;padding:15px;border-radius:14px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#34d399,#38bdf8);color:#0f172a;
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:800;letter-spacing:0.3px;
+  transition:.3s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.otw-save:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(52,211,153,0.35);}
+.otw-save:active{transform:scale(0.98);}
+
+/* Toast */
+.otw-toast {
+  position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:linear-gradient(135deg,rgba(34,197,94,0.95),rgba(52,211,153,0.9));
+  color:#0f172a;padding:12px 28px;border-radius:50px;
+  font-size:14px;font-weight:700;z-index:20000;
+  opacity:0;transition:.4s;pointer-events:none;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 8px 32px rgba(52,211,153,0.4);
+}
+.otw-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* Profile card in panel */
+.otw-profile {
+  display:flex;align-items:center;gap:14px;
+  padding:16px 32px 0;
+}
+.otw-avatar {
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:white;
+  border:2px solid rgba(56,189,248,0.4);flex-shrink:0;
+}
+.otw-profile-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:#e2e8f0;}
+.otw-profile-role{font-size:12px;color:#64748b;margin-top:2px;}
+
+/* Divider */
+.otw-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);margin:0 0 22px;}
+
 </style>
 </head>
 <body>
@@ -377,7 +553,14 @@ footer{text-align:center;padding:40px;border-top:1px solid var(--border);color:v
   <canvas id="hero-3d-canvas"></canvas>
 
   <div class="hero-inner" style="position:relative;z-index:2;">
-    <div class="hero-badge"><span></span> Available for opportunities</div>
+    <div class="otw-badge" id="otwBadge" onclick="openOTW()">
+      <div class="otw-dot"></div>
+      <div class="otw-badge-text">
+        <span># Open to Work</span>
+        <span class="otw-badge-sub">CLICK TO VIEW PREFERENCES</span>
+      </div>
+      <span class="otw-arrow">→</span>
+    </div>
     <h1>Hello, I'm<br><span class="name">Kundan Kumar</span></h1>
     <div class="hero-sub"><span id="typing-text"></span><span class="cursor-blink">|</span></div>
     <p class="hero-desc">Angular & ServiceNow Developer with <strong style="color:var(--sky)">4.9+ years</strong> of experience building scalable frontend applications and enterprise ITSM solutions. Specialized in Angular 17+, RxJS, NgRx, and ServiceNow platform development.</p>
@@ -824,209 +1007,269 @@ footer{text-align:center;padding:40px;border-top:1px solid var(--border);color:v
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   const scene = new THREE.Scene();
-  const camera = new THREE.OrthographicCamera(0, window.innerWidth, 0, window.innerHeight, -100, 100);
-  camera.position.z = 10;
+  // Orthographic camera so we can position in pixel space
+  const camera = new THREE.OrthographicCamera(0, window.innerWidth, 0, window.innerHeight, -500, 500);
 
-  // We'll work in screen space using OrthographicCamera
-  // All objects positioned at (mouseX, mouseY, 0)
-  const cursorGroup = new THREE.Group();
-  scene.add(cursorGroup);
+  /* ---- Custom cursor dot (replaces default) ---- */
+  const dotGeo = new THREE.SphereGeometry(3, 16, 16);
+  const dotMat = new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:1});
+  const cursorDot = new THREE.Mesh(dotGeo, dotMat);
+  scene.add(cursorDot);
 
-  /* ---- Inner spinning diamond ---- */
-  const diamondGeo = new THREE.OctahedronGeometry(10, 0);
-  const diamondMat = new THREE.MeshBasicMaterial({color:0x38bdf8, wireframe:true, transparent:true, opacity:0.9});
-  const diamond = new THREE.Mesh(diamondGeo, diamondMat);
-  cursorGroup.add(diamond);
+  /* ---- Main crystal / diamond ---- */
+  const crystalGeo = new THREE.OctahedronGeometry(14, 0);
+  const crystalMat = new THREE.MeshBasicMaterial({color:0x38bdf8, wireframe:true, transparent:true, opacity:0.95});
+  const crystal = new THREE.Mesh(crystalGeo, crystalMat);
+  scene.add(crystal);
 
-  /* ---- Outer spinning ring ---- */
-  const ringGeo = new THREE.TorusGeometry(18, 1.2, 6, 40);
-  const ringMat = new THREE.MeshBasicMaterial({color:0x818cf8, transparent:true, opacity:0.7});
-  const ring = new THREE.Mesh(ringGeo, ringMat);
-  cursorGroup.add(ring);
+  /* ---- Inner solid crystal ---- */
+  const innerGeo = new THREE.OctahedronGeometry(8, 0);
+  const innerMat = new THREE.MeshBasicMaterial({color:0x818cf8, transparent:true, opacity:0.2});
+  const innerCrystal = new THREE.Mesh(innerGeo, innerMat);
+  scene.add(innerCrystal);
 
-  /* ---- Second counter-ring ---- */
-  const ring2Geo = new THREE.TorusGeometry(28, 0.6, 4, 50);
-  const ring2Mat = new THREE.MeshBasicMaterial({color:0x34d399, transparent:true, opacity:0.4});
-  const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
-  cursorGroup.add(ring2);
+  /* ---- Spinning ring 1 ---- */
+  const ring1 = new THREE.Mesh(
+    new THREE.TorusGeometry(22, 1.5, 8, 48),
+    new THREE.MeshBasicMaterial({color:0x38bdf8, transparent:true, opacity:0.7})
+  );
+  scene.add(ring1);
 
-  /* ---- Orbiting dots ---- */
-  const orbitDots = [];
-  const dotColors = [0x38bdf8, 0x818cf8, 0x34d399, 0xfb923c, 0xfbbf24];
-  for(let i=0;i<5;i++){
-    const geo = new THREE.SphereGeometry(2.5, 8, 8);
-    const mat = new THREE.MeshBasicMaterial({color: dotColors[i], transparent:true, opacity:0.95});
-    const dot = new THREE.Mesh(geo, mat);
-    dot.userData.angle = (i/5)*Math.PI*2;
-    dot.userData.radius = 22 + i*4;
-    dot.userData.speed = 0.04 + i*0.008;
-    dot.userData.zPhase = i * 0.8;
-    cursorGroup.add(dot);
-    orbitDots.push(dot);
+  /* ---- Spinning ring 2 (counter) ---- */
+  const ring2 = new THREE.Mesh(
+    new THREE.TorusGeometry(32, 0.8, 6, 60),
+    new THREE.MeshBasicMaterial({color:0x818cf8, transparent:true, opacity:0.5})
+  );
+  scene.add(ring2);
+
+  /* ---- Spinning ring 3 (tilted) ---- */
+  const ring3 = new THREE.Mesh(
+    new THREE.TorusGeometry(42, 0.5, 4, 70),
+    new THREE.MeshBasicMaterial({color:0x34d399, transparent:true, opacity:0.35})
+  );
+  scene.add(ring3);
+
+  /* ---- 6 orbiting colored spheres ---- */
+  const orbits = [];
+  const orbitColors = [0x38bdf8, 0x818cf8, 0x34d399, 0xfb923c, 0xfbbf24, 0xf472b6];
+  for(let i=0;i<6;i++){
+    const mesh = new THREE.Mesh(
+      new THREE.SphereGeometry(3.5, 10, 10),
+      new THREE.MeshBasicMaterial({color:orbitColors[i], transparent:true, opacity:0.95})
+    );
+    mesh.userData = {
+      angle: (i/6)*Math.PI*2,
+      radius: 28 + Math.sin(i)*6,
+      speed: 0.05 + i*0.006,
+      zAmp: 10 + i*3,
+      zPhase: i*1.2
+    };
+    scene.add(mesh);
+    orbits.push(mesh);
   }
 
-  /* ---- Trailing particles ---- */
-  const trailCount = 30;
-  const trail = [];
-  const trailGroup = new THREE.Group();
-  scene.add(trailGroup);
-  for(let i=0;i<trailCount;i++){
-    const geo = new THREE.SphereGeometry(1.5, 6, 6);
-    const mat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color().setHSL(0.55 + i/trailCount*0.2, 1, 0.6),
-      transparent:true,
-      opacity: (1-i/trailCount)*0.7
-    });
-    const mesh = new THREE.Mesh(geo, mat);
+  /* ---- Magnetic field lines (icosahedron shell) ---- */
+  const fieldGeo = new THREE.IcosahedronGeometry(50, 1);
+  const fieldMat = new THREE.MeshBasicMaterial({color:0x38bdf8, wireframe:true, transparent:true, opacity:0.06});
+  const field = new THREE.Mesh(fieldGeo, fieldMat);
+  scene.add(field);
+
+  /* ---- Comet trail ---- */
+  const TRAIL = 50;
+  const trailMeshes = [];
+  for(let i=0;i<TRAIL;i++){
+    const s = (1 - i/TRAIL) * 4;
+    const mesh = new THREE.Mesh(
+      new THREE.SphereGeometry(Math.max(s,0.3), 6, 6),
+      new THREE.MeshBasicMaterial({
+        color: new THREE.Color().setHSL(0.55 + i/TRAIL*0.25, 1, 0.55+i/TRAIL*0.2),
+        transparent:true, opacity: (1-i/TRAIL)*0.55
+      })
+    );
     mesh.visible = false;
-    trailGroup.add(mesh);
-    trail.push({mesh, x:0, y:0, life:0});
+    scene.add(mesh);
+    trailMeshes.push({mesh, x:0, y:0, life:0});
   }
+  let trailIdx = 0;
 
-  /* ---- Burst particles (on click) ---- */
+  /* ---- Click ripple rings ---- */
+  const ripples = [];
+  for(let i=0;i<12;i++){
+    const mesh = new THREE.Mesh(
+      new THREE.TorusGeometry(1, 1.5, 6, 40),
+      new THREE.MeshBasicMaterial({color:orbitColors[i%6], transparent:true, opacity:0})
+    );
+    mesh.visible = false;
+    scene.add(mesh);
+    ripples.push({mesh, life:0, maxR:0, x:0, y:0, delay:0});
+  }
+  let rippleIdx = 0;
+
+  /* ---- Scatter burst on click ---- */
   const bursts = [];
-  const burstGroup = new THREE.Group();
-  scene.add(burstGroup);
-  for(let i=0;i<40;i++){
-    const geo = new THREE.SphereGeometry(2, 6, 6);
-    const mat = new THREE.MeshBasicMaterial({color: dotColors[i%5], transparent:true, opacity:0});
-    const mesh = new THREE.Mesh(geo, mat);
+  for(let i=0;i<60;i++){
+    const mesh = new THREE.Mesh(
+      new THREE.SphereGeometry(2.5, 6, 6),
+      new THREE.MeshBasicMaterial({color:orbitColors[i%6], transparent:true, opacity:0})
+    );
     mesh.visible = false;
-    burstGroup.add(mesh);
-    bursts.push({mesh, vx:0, vy:0, vz:0, life:0, maxLife:0});
+    scene.add(mesh);
+    bursts.push({mesh, vx:0, vy:0, vz:0, life:0});
   }
+  let burstIdx = 0;
 
-  /* ---- Glow backdrop ---- */
-  const glowGeo = new THREE.CircleGeometry(80, 32);
-  const glowMat = new THREE.MeshBasicMaterial({
-    color:0x38bdf8, transparent:true, opacity:0.04,
-    depthWrite:false
-  });
-  const glow = new THREE.Mesh(glowGeo, glowMat);
-  scene.add(glow);
+  /* ---- Hover aura glow ---- */
+  const auraGeo = new THREE.CircleGeometry(120, 32);
+  const auraMat = new THREE.MeshBasicMaterial({color:0x38bdf8, transparent:true, opacity:0, depthWrite:false});
+  const aura = new THREE.Mesh(auraGeo, auraMat);
+  aura.position.z = -10;
+  scene.add(aura);
 
-  let mouseX = window.innerWidth/2;
-  let mouseY = window.innerHeight/2;
-  let smoothX = mouseX;
-  let smoothY = mouseY;
-  let trailIndex = 0;
+  /* ---- State ---- */
+  let mx = window.innerWidth/2, my = window.innerHeight/2;
+  let sx = mx, sy = my;
   let t = 0;
-  let isHovering = false;
+  let isHover = false;
+  let isClick = false;
 
   document.addEventListener('mousemove', e => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-
-    // Spawn trail particle
-    const tp = trail[trailIndex % trailCount];
-    tp.x = mouseX; tp.y = mouseY; tp.life = 1;
-    tp.mesh.position.set(mouseX, mouseY, -1);
-    tp.mesh.visible = true;
-    tp.mesh.scale.setScalar(1);
-    trailIndex++;
+    mx = e.clientX; my = e.clientY;
+    // Spawn trail
+    const tp = trailMeshes[trailIdx % TRAIL];
+    tp.x=mx; tp.y=my; tp.life=1;
+    tp.mesh.position.set(mx,my,0);
+    tp.mesh.visible=true;
+    trailIdx++;
   });
 
-  /* ---- Click burst ---- */
   document.addEventListener('click', e => {
-    let spawned = 0;
-    for(let i=0;i<bursts.length && spawned<20;i++){
-      const b = bursts[i];
-      if(b.life <= 0){
-        const angle = Math.random()*Math.PI*2;
-        const speed = 3 + Math.random()*5;
-        b.vx = Math.cos(angle)*speed;
-        b.vy = Math.sin(angle)*speed;
-        b.vz = (Math.random()-0.5)*4;
-        b.life = 1;
-        b.maxLife = 0.6 + Math.random()*0.4;
-        b.mesh.position.set(e.clientX, e.clientY, 0);
-        b.mesh.visible = true;
-        b.mesh.material.opacity = 0.9;
-        b.mesh.scale.setScalar(1);
+    isClick = true;
+    // Spawn ripples
+    for(let r=0;r<4;r++){
+      const rp = ripples[rippleIdx%ripples.length];
+      rp.x=e.clientX; rp.y=e.clientY;
+      rp.life=1; rp.maxR=60+r*30; rp.delay=r*0.08;
+      rp.mesh.position.set(e.clientX,e.clientY,0);
+      rp.mesh.visible=true;
+      rippleIdx++;
+    }
+    // Spawn burst
+    let spawned=0;
+    for(let i=0;i<bursts.length&&spawned<24;i++){
+      const b=bursts[i];
+      if(b.life<=0){
+        const angle=Math.random()*Math.PI*2;
+        const spd=4+Math.random()*7;
+        b.vx=Math.cos(angle)*spd; b.vy=Math.sin(angle)*spd; b.vz=(Math.random()-0.5)*6;
+        b.life=1;
+        b.mesh.position.set(e.clientX,e.clientY,0);
+        b.mesh.material.opacity=0.9;
+        b.mesh.visible=true;
         spawned++;
       }
     }
+    setTimeout(()=>{ isClick=false; },200);
   });
 
-  /* ---- Hover effect on interactive elements ---- */
-  document.querySelectorAll('a,button,.btn,.chip,.skill-pill,.cert-card,.sn-module,.flip-card,.script-card,.timeline-item').forEach(el => {
-    el.addEventListener('mouseenter', () => { isHovering = true; });
-    el.addEventListener('mouseleave', () => { isHovering = false; });
+  /* hover detection */
+  const hoverTargets = 'a,button,.btn,.chip,.skill-pill,.cert-card,.sn-module,.flip-card,.script-card,.timeline-item,.contact-link,.nav-link';
+  document.querySelectorAll(hoverTargets).forEach(el=>{
+    el.addEventListener('mouseenter',()=>isHover=true);
+    el.addEventListener('mouseleave',()=>isHover=false);
   });
 
-  window.addEventListener('resize', () => {
+  window.addEventListener('resize',()=>{
     renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.right = window.innerWidth;
-    camera.bottom = window.innerHeight;
+    camera.right=window.innerWidth; camera.bottom=window.innerHeight;
     camera.updateProjectionMatrix();
   });
 
   function animate(){
     requestAnimationFrame(animate);
-    t += 0.05;
+    t+=0.045;
 
-    // Smooth follow
-    smoothX += (mouseX - smoothX) * 0.12;
-    smoothY += (mouseY - smoothY) * 0.12;
+    // Smooth cursor follow
+    const lag = isHover ? 0.07 : 0.14;
+    sx += (mx-sx)*lag; sy += (my-sy)*lag;
 
-    // Scale up when hovering interactive elements
-    const targetScale = isHovering ? 1.7 : 1.0;
-    cursorGroup.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+    const targetScale = isClick ? 1.8 : isHover ? 1.5 : 1.0;
+    const cs = crystal.scale.x + (targetScale-crystal.scale.x)*0.1;
+    const sv = new THREE.Vector3(cs,cs,cs);
 
-    cursorGroup.position.set(smoothX, smoothY, 0);
-    glow.position.set(smoothX, smoothY, -2);
+    // Position all cursor objects
+    cursorDot.position.set(mx,my,5);
+    [crystal,innerCrystal,ring1,ring2,ring3,field,aura].forEach(o=>o.position.set(sx,sy,0));
 
-    // Diamond spin
-    diamond.rotation.x += 0.03;
-    diamond.rotation.y += 0.04;
-    diamond.rotation.z += 0.02;
+    // Scale
+    [crystal,innerCrystal,ring1,ring2,ring3,field].forEach(o=>o.scale.copy(sv));
 
-    // Ring spin
-    ring.rotation.z += 0.03;
-    ring.rotation.x = Math.sin(t*0.5)*0.4;
+    // Spin crystal
+    crystal.rotation.x+=0.04; crystal.rotation.y+=0.05; crystal.rotation.z+=0.02;
+    innerCrystal.rotation.x-=0.03; innerCrystal.rotation.z+=0.04;
 
-    // Counter-ring
-    ring2.rotation.z -= 0.02;
-    ring2.rotation.y = Math.cos(t*0.3)*0.5;
+    // Rings
+    ring1.rotation.z+=0.04; ring1.rotation.x=Math.sin(t*0.7)*0.5*cs;
+    ring2.rotation.z-=0.025; ring2.rotation.y=Math.cos(t*0.5)*0.6*cs;
+    ring3.rotation.y+=0.02; ring3.rotation.x=t*0.3;
 
-    // Orbiting dots
-    orbitDots.forEach((dot, i) => {
-      dot.userData.angle += dot.userData.speed;
-      const r = dot.userData.radius;
-      dot.position.x = Math.cos(dot.userData.angle) * r;
-      dot.position.y = Math.sin(dot.userData.angle) * r;
-      dot.position.z = Math.sin(t + dot.userData.zPhase) * 8;
-      dot.scale.setScalar(0.7 + Math.sin(t*2 + i)*0.4);
+    // Field shell
+    field.rotation.x+=0.005; field.rotation.y+=0.008;
+
+    // Orbiting spheres
+    orbits.forEach((o,i)=>{
+      o.userData.angle+=o.userData.speed*(isHover?1.6:1);
+      const r=o.userData.radius*cs;
+      o.position.set(
+        sx+Math.cos(o.userData.angle)*r,
+        sy+Math.sin(o.userData.angle)*r,
+        Math.sin(t+o.userData.zPhase)*o.userData.zAmp
+      );
+      o.scale.setScalar(0.6+Math.sin(t*2+i)*0.5);
     });
+
+    // Aura pulse
+    auraMat.opacity = isHover ? 0.04+Math.sin(t)*0.015 : 0;
+    aura.scale.setScalar(1+Math.sin(t)*0.06);
 
     // Trail fade
-    trail.forEach(tp => {
-      if(tp.life > 0){
-        tp.life -= 0.06;
-        tp.mesh.material.opacity = tp.life * 0.6;
-        tp.mesh.scale.setScalar(tp.life * 0.8 + 0.2);
-        if(tp.life <= 0){ tp.mesh.visible = false; }
+    trailMeshes.forEach(tp=>{
+      if(tp.life>0){
+        tp.life-=0.055;
+        tp.mesh.material.opacity=tp.life*0.5;
+        tp.mesh.scale.setScalar(tp.life*0.9+0.1);
+        if(tp.life<=0) tp.mesh.visible=false;
       }
     });
 
-    // Burst particles
-    bursts.forEach(b => {
-      if(b.life > 0){
-        b.life -= 0.035;
-        b.mesh.position.x += b.vx;
-        b.mesh.position.y += b.vy;
-        b.mesh.position.z += b.vz;
-        b.vx *= 0.92; b.vy *= 0.92; b.vz *= 0.92;
-        b.mesh.material.opacity = b.life * 0.85;
-        b.mesh.scale.setScalar(b.life + 0.2);
-        if(b.life <= 0){ b.mesh.visible = false; }
+    // Ripples expand
+    ripples.forEach(rp=>{
+      if(rp.life>0){
+        rp.life-=0.028;
+        const progress=1-rp.life;
+        const r=progress*rp.maxR;
+        rp.mesh.scale.setScalar(r);
+        rp.mesh.material.opacity=rp.life*0.6;
+        if(rp.life<=0) rp.mesh.visible=false;
       }
     });
 
-    // Glow pulse
-    glow.material.opacity = 0.03 + Math.sin(t)*0.015;
+    // Bursts
+    bursts.forEach(b=>{
+      if(b.life>0){
+        b.life-=0.032;
+        b.mesh.position.x+=b.vx; b.mesh.position.y+=b.vy; b.mesh.position.z+=b.vz;
+        b.vx*=0.91; b.vy*=0.91; b.vz*=0.91;
+        b.mesh.material.opacity=b.life*0.85;
+        b.mesh.scale.setScalar(b.life+0.2);
+        if(b.life<=0) b.mesh.visible=false;
+      }
+    });
 
-    renderer.render(scene, camera);
+    // Dot pulse
+    cursorDot.scale.setScalar(isHover?1.5+Math.sin(t*4)*0.3:1+Math.sin(t*4)*0.15);
+    cursorDot.material.color.setHSL(0.58+Math.sin(t)*0.05,1,0.75);
+
+    renderer.render(scene,camera);
   }
   animate();
 })();
